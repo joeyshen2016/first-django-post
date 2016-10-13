@@ -19,6 +19,21 @@
     </div>
 <hr>
 
+<p> Uploaded files: </p>
+<ul>
+    {% for obj in documents %}
+    <li>
+        <a href="{{ obj.document.url }}">{{ object.document.name }} </a>
+        <img src="{{ obj.document.url }}">
+    </li>
+    {% endfor %}
+</ul>
+
+<li>
+    <a href="{% url 'model_form_upload' %}">Model Form Upload</a>
+</li>
+    
+<hr>
 <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment </a>
 {% for comment in post.comments.all %}
     {% if user.is_authenticated or comment.approved_comment %}

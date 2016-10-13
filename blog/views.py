@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from .models import Post, Comment, Document
+from .forms import PostForm, CommentForm, DocumentForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+import pdb
+
 # Create your views here.
 
 def post_list(request):
@@ -12,7 +14,9 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    #pdb.set_trace()
+    documents = Document.objects.all()
+    return render(request, 'blog/post_detail.html', {'post': post, 'documents': documents})
 
 @login_required
 def post_new(request):
@@ -87,3 +91,13 @@ def comment_remove(request, pk):
     post_pk = comment.post.pk
     comment.delete()
     return redirect('post_detail', pk=post_pk)
+    
+def model_form_upload(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return render(request, 'blog/model_form_upload.html', {'form': form})
+    else:
+        form = DocumentForm()
+    return render(request, 'blog/model_form_upload.html', {'form': form})
