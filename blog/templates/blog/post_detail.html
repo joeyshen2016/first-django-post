@@ -21,16 +21,19 @@
 
 <p> Uploaded files: </p>
 <ul>
-    {% for obj in documents %}
+    {% for media in post.medias.all %} 
     <li>
-        <a href="{{ obj.document.url }}">{{ object.document.name }} </a>
-        <img src="{{ obj.document.url }}">
+        <a href="{{ media.media.url }}">{{ media.media.name }} </a>
+        {% if user.is_authenticated %}
+            <a class="btn btn-default" href="{% url 'media_remove' pk=media.pk %}"><span class="glyphicon glyphicon-remove"></span></a> 
+        {% endif %}
     </li>
+    <img src="{{ media.media.url }}" height="128" width="128">
     {% endfor %}
 </ul>
 
 <li>
-    <a href="{% url 'model_form_upload' %}">Model Form Upload</a>
+    <a href="{% url 'upload_media_to_post' pk=post.pk %}">Upload media</a>
 </li>
     
 <hr>

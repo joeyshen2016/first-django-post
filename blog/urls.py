@@ -28,9 +28,9 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/remove/$', views.post_remove, name='post_remove'),
     url(r'^post/(?P<pk>\d+)/comment/$', views.add_comment_to_post, name='add_comment_to_post'),
     url(r'^comment/(?P<pk>\d+)/approve/$', views.comment_approve, name='comment_approve'),
-    url(r'^comment/(?P<pk>\d+)/comment/$', views.comment_remove, name='comment_remove'),
-
-    url(r'^uploads/form/$', views.model_form_upload, name='model_form_upload'),
+    url(r'^comment/(?P<pk>\d+)/remove/$', views.comment_remove, name='comment_remove'),
+    url(r'^post/(?P<pk>\d+)/media/$', views.upload_media_to_post, name='upload_media_to_post'),
+    url(r'^media/(?P<pk>\d+)/remove/$', views.media_remove, name='media_remove'),
     
 ]
 

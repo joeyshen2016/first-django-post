@@ -38,7 +38,8 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
     
-class Document(models.Model):
+class Media(models.Model):
+    post = models.ForeignKey('blog.Post', related_name="medias")
     description = models.CharField(max_length=255, blank=True)
-    document = models.FileField(upload_to='documents/')
+    media = models.FileField(upload_to='media/')
     uploaded_at = models.DateTimeField(auto_now_add=True)

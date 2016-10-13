@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from .models import Post, Comment, Document
-from .forms import PostForm, CommentForm, DocumentForm
+from .models import Post, Comment, Media
+from .forms import PostForm, CommentForm, MediaForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 import pdb
@@ -15,8 +15,8 @@ def post_list(request):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     #pdb.set_trace()
-    documents = Document.objects.all()
-    return render(request, 'blog/post_detail.html', {'post': post, 'documents': documents})
+    medias = Media.objects.all()
+    return render(request, 'blog/post_detail.html', {'post': post, 'medias': medias})
 
 @login_required
 def post_new(request):
@@ -91,13 +91,24 @@ def comment_remove(request, pk):
     post_pk = comment.post.pk
     comment.delete()
     return redirect('post_detail', pk=post_pk)
-    
-def model_form_upload(request):
+
+@login_required
+def upload_media_to_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        form = MediaForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return render(request, 'blog/model_form_upload.html', {'form': form})
+            media = form.save(commit=False)
+            media.post = post
+            media.save()
+            return redirect('post_detail', pk=post.pk)
     else:
-        form = DocumentForm()
-    return render(request, 'blog/model_form_upload.html', {'form': form})
+        form = MediaForm()
+    return render(request, 'blog/upload_media_to_post.html', {'form': form})
+
+@login_required
+def media_remove(request, pk):
+    media = get_object_or_404(Media, pk=pk)
+    post_pk = media.post.pk
+    media.delete()
+    return redirect('post_detail', pk=post_pk)
